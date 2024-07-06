@@ -32,7 +32,5 @@ export const handler: Handler = async (
         message: error.message,
       }),
     };
-  } finally {
-    await sequelize.close();
   }
 };

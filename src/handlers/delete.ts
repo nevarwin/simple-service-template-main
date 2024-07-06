@@ -1,41 +1,35 @@
-import type { APIGatewayProxyStructuredResultV2, Handler } from 'aws-lambda';
-import { DataTypes, Sequelize } from 'sequelize';
+import type { APIGatewayProxyStructuredResultV2, Handler } from "aws-lambda";
+import User from "../models/user-model";
+import { sequelize } from "../utils/connection";
 
-export const handler: Handler =
-    async (event): Promise<APIGatewayProxyStructuredResultV2> => {
-        const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
-        const requestBody = JSON.parse(event.body);
-        const {id} = requestBody;
-        const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-            host: DB_HOST,
-            dialect: 'mysql',
-        });
+export const handler: Handler = async (
+  event
+): Promise<APIGatewayProxyStructuredResultV2> => {
+  const { id } = event.pathParameters.id;
 
-        sequelize.authenticate();
+  try {
+    await sequelize.sync();
+    const userList = await User.destroy({
+      where: {
+        id: id,
+      },
+    });
 
-        const users = sequelize.define(
-            'Users',
-            {
-                name: {
-                    type: DataTypes.STRING,
-                },
-            },
-            {
-                tableName: 'users_tb',
-                timestamps: false,
-            }
-        );
-
-        const useLists = await users.destroy({
-            where: {
-                id: id,
-            },
-        });
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                data: useLists,
-            }),
-        };
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        data: userList,
+        message: "User deleted",
+      }),
     };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: error.message,
+      }),
+    };
+  } finally {
+    await sequelize.close();
+  }
+};

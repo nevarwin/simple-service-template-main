@@ -1,44 +1,38 @@
 import type {
-    APIGatewayProxyStructuredResultV2,
-    APIGatewayProxyEventV2,
-    Handler,
-} from 'aws-lambda';
-import { DataTypes, Sequelize } from 'sequelize';
+  APIGatewayProxyStructuredResultV2,
+  APIGatewayProxyEventV2,
+  Handler,
+} from "aws-lambda";
+import User from "../models/user-model";
+import { sequelize } from "../utils/connection";
 
 export const handler: Handler = async (
-    event: APIGatewayProxyEventV2
+  event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyStructuredResultV2> => {
-    const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
-    const { name } = JSON.parse(event.body);
+  const { name, email, password } = JSON.parse(event.body);
 
-    const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-        host: DB_HOST,
-        dialect: 'mysql',
+  try {
+    await sequelize.sync();
+    await User.create({
+      name,
+      email,
+      password,
     });
-
-    sequelize.authenticate();
-
-    const users = sequelize.define(
-        'Users',
-        {
-            name: {
-                type: DataTypes.STRING,
-            },
-        },
-        {
-            tableName: 'users_tb',
-            timestamps: false,
-        }
-    );
-
-    await users.create({
-        name,
-    });
-
     return {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: `name: ${name}`,
-        }),
+      statusCode: 201,
+      body: JSON.stringify({
+        data: `Created name: ${name}, email: ${email}, password: ${password}`,
+        message: "User created successfully",
+      }),
     };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: error.message,
+      }),
+    };
+  } finally {
+    await sequelize.close();
+  }
 };

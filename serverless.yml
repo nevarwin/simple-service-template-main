@@ -40,12 +40,12 @@ functions:
     handler: src/handlers/update.handler
     events:
       - http:
-          path: /update
+          path: /update/{id}
           method: put
 
   delete:
     handler: src/handlers/delete.handler
     events:
       - http:
-          path: /delete
+          path: /delete/{id}
           method: delete

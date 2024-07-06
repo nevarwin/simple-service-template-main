@@ -1,45 +1,48 @@
-import type { APIGatewayProxyStructuredResultV2, Handler } from 'aws-lambda';
-import { DataTypes, Sequelize } from 'sequelize';
+import type { APIGatewayProxyStructuredResultV2, Handler } from "aws-lambda";
+import User from "../models/user-model";
+import { sequelize } from "../utils/connection";
 
-export const handler: Handler =
-    async (event): Promise<APIGatewayProxyStructuredResultV2> => {
-        const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
-        const requestBody = JSON.parse(event.body);
-        const {id,name} = requestBody;
+export const handler: Handler = async (
+  event
+): Promise<APIGatewayProxyStructuredResultV2> => {
+  const id = event.pathParameters.id;
+  const { name, email, password } = JSON.parse(event.body);
 
-        const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-            host: DB_HOST,
-            dialect: 'mysql',
-        });
+  try {
+    await sequelize.sync();
+    const userList = await User.update(
+      { name: name, email: email, password: password },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
 
-        sequelize.authenticate();
+    if (userList.length === 0) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: "User not found",
+        }),
+      };
+    }
 
-
-        const users = sequelize.define(
-            'Users',
-            {
-                name: {
-                    type: DataTypes.STRING,
-                },
-            },
-            {
-                tableName: 'users_tb',
-                timestamps: false,
-            }
-        );
-
-        const useLists = await users.update(
-            { name: name},
-            {
-            where: {
-                id: id,
-            },
-        });
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                data: useLists,
-            }),
-        };
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        data: `Updated name: ${name}, email: ${email}, password: ${password}`,
+        message: "User updated",
+      }),
     };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: error.message,
+      }),
+    };
+  } finally {
+    await sequelize.close();
+  }
+};

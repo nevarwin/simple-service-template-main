@@ -49,3 +49,31 @@ functions:
       - http:
           path: /delete/{id}
           method: delete
+
+  create-project:
+    handler: src/handlers/Project/create-project.handler
+    events:
+      - http:
+          path: /{id}/create-project
+          method: post
+
+  view-project:
+    handler: src/handlers/Project/view-project.handler
+    events:
+      - http:
+          path: /{user_id}/view-project
+          method: get
+
+  update-project:
+    handler: src/handlers/Project/update-project.handler
+    events:
+      - http:
+          path: /{user_id}/update-project/{id}
+          method: put
+
+  delete-project:
+    handler: src/handlers/Project/delete-project.handler
+    events:
+      - http:
+          path: /delete-project/{id}
+          method: delete

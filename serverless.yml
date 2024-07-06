@@ -23,28 +23,28 @@ custom:
 
 functions:
   create:
-    handler: src/handlers/create.handler
+    handler: src/handlers/User/create.handler
     events:
       - http:
           path: /create
           method: post
 
   view:
-    handler: src/handlers/view.handler
+    handler: src/handlers/User/view.handler
     events:
       - http:
           path: /view/{id}
           method: get
 
   update:
-    handler: src/handlers/update.handler
+    handler: src/handlers/User/update.handler
     events:
       - http:
           path: /update/{id}
           method: put
 
   delete:
-    handler: src/handlers/delete.handler
+    handler: src/handlers/User/delete.handler
     events:
       - http:
           path: /delete/{id}

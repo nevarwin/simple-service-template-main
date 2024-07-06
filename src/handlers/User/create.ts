@@ -3,8 +3,8 @@ import type {
   APIGatewayProxyEventV2,
   Handler,
 } from "aws-lambda";
-import User from "../models/user-model";
-import { sequelize } from "../utils/connection";
+import User from "../../models/user-model";
+import { sequelize } from "../../utils/connection";
 
 export const handler: Handler = async (
   event: APIGatewayProxyEventV2

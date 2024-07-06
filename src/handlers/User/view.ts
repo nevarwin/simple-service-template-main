@@ -1,23 +1,19 @@
 import type { APIGatewayProxyStructuredResultV2, Handler } from "aws-lambda";
-import User from "../models/user-model";
-import { sequelize } from "../utils/connection";
+import User from "../../models/user-model";
+import { sequelize } from "../../utils/connection";
 
 export const handler: Handler = async (
   event
 ): Promise<APIGatewayProxyStructuredResultV2> => {
   const id = event.pathParameters.id;
-  const { name, email, password } = JSON.parse(event.body);
 
   try {
     await sequelize.sync();
-    const userList = await User.update(
-      { name: name, email: email, password: password },
-      {
-        where: {
-          id: id,
-        },
-      }
-    );
+    const userList = await User.findAll({
+      where: {
+        id: id,
+      },
+    });
 
     if (userList.length === 0) {
       return {
@@ -31,8 +27,8 @@ export const handler: Handler = async (
     return {
       statusCode: 200,
       body: JSON.stringify({
-        data: `Updated name: ${name}, email: ${email}, password: ${password}`,
-        message: "User updated",
+        data: userList,
+        message: "User found",
       }),
     };
   } catch (error) {

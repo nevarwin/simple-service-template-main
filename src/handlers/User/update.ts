@@ -1,6 +1,6 @@
 import type { APIGatewayProxyStructuredResultV2, Handler } from "aws-lambda";
 import { sequelize } from "../../utils/connection";
-const { User } = require("../../models/relationship");
+import User from "../../models/user-model";
 
 export const handler: Handler = async (
   event

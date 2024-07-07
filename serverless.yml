@@ -36,6 +36,13 @@ functions:
           path: /view/{id}
           method: get
 
+  view-users:
+    handler: src/handlers/User/view-users.handler
+    events:
+      - http:
+          path: /view-users
+          method: get
+
   update:
     handler: src/handlers/User/update.handler
     events:

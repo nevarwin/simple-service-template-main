@@ -3,7 +3,7 @@ import type {
     APIGatewayProxyEventV2,
     Handler,
 } from "aws-lambda";
-import User from "../../models/user-model";
+import db from "../../models/associations";
 
 export const handler: Handler = async (
     event: APIGatewayProxyEventV2
@@ -11,7 +11,7 @@ export const handler: Handler = async (
     const { name, email, password } = JSON.parse(event.body);
 
     try {
-        await User.create({
+        await db.User.create({
             name,
             email,
             password,

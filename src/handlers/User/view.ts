@@ -1,5 +1,5 @@
 import type { APIGatewayProxyStructuredResultV2, Handler } from "aws-lambda";
-import User from "../../models/user-model";
+import db from "../../models/associations";
 
 export const handler: Handler = async (
     event
@@ -7,7 +7,7 @@ export const handler: Handler = async (
     const id = event.pathParameters.id;
 
     try {
-        const userList = await User.findAll({
+        const userList = await db.User.findAll({
             where: {
                 id: id,
             },

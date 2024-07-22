@@ -26,6 +26,6 @@
         "typescript": "^5.4.3"
     },
     "scripts": {
-        "dev": "nodemon --ext ts,js,mjs,cjs,json --exec serverless offline --httpPort 3001"
+        "dev": "nodemon --ext ts,js,mjs,cjs,json --exec serverless offline --httpPort 3000"
     }
 }

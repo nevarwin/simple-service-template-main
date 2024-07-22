@@ -21,7 +21,7 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        createdAt: {
+        created_at: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
         },
@@ -31,7 +31,9 @@ const User = sequelize.define(
         },
     },
     {
+        tableName: "users_tb",
         timestamps: false,
+        schema: "testing",
     }
 );
 

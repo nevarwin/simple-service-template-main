@@ -1,3 +1,15 @@
 {
-    "prettier.tabWidth": 4
+    "prettier.tabWidth": 4,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Postgres Testing",
+            "database": "postgres",
+            "username": "postgres",
+            "password": "raven"
+        }
+    ]
 }

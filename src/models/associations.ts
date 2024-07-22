@@ -14,7 +14,7 @@ db.sequelize
     .authenticate()
     .then(async () => {
         console.log("Connection has been established successfully.");
-        await db.sequelize.sync({ alter: true }); // Use alter: true to update tables to match the models
+        await db.sequelize.sync({ force: true });
         console.log("All models were synchronized successfully.");
     })
     .catch((err) => {

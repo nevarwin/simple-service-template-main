@@ -27,7 +27,7 @@ const Project = sequelize.define(
             },
             onDelete: "CASCADE",
         },
-        createdAt: {
+        created_at: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
         },
@@ -37,6 +37,7 @@ const Project = sequelize.define(
         },
     },
     {
+        tableName: "projects_tb",
         timestamps: false,
     }
 );

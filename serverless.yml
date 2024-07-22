@@ -2,85 +2,88 @@ service: project-service
 frameworkVersion: "3"
 
 provider:
-  name: aws
-  runtime: nodejs18.x
-  timeout: 30
-  environment:
-    DB_HOST: localhost
-    DB_NAME: test
-    DB_USER: root
-    DB_PASSWORD: ""
+    name: aws
+    runtime: nodejs18.x
+    timeout: 30
+    region: ap-southeast-1
+
+    environment:
+        DB_HOST: localhost
+        DB_NAME: postgres
+        DB_USER: postgres
+        DB_PASSWORD: raven
+        port: 5432
 
 plugins:
-  - serverless-prune-versions
-  - serverless-esbuild
-  - serverless-offline
+    - serverless-prune-versions
+    - serverless-esbuild
+    - serverless-offline
 
 custom:
-  prune:
-    automatic: true
-    number: 3
+    prune:
+        automatic: true
+        number: 3
 
 functions:
-  create:
-    handler: src/handlers/User/create.handler
-    events:
-      - http:
-          path: /create
-          method: post
+    create:
+        handler: src/handlers/User/create.handler
+        events:
+            - http:
+                  path: /create
+                  method: post
 
-  view:
-    handler: src/handlers/User/view.handler
-    events:
-      - http:
-          path: /view/{id}
-          method: get
+    view:
+        handler: src/handlers/User/view.handler
+        events:
+            - http:
+                  path: /view/{id}
+                  method: get
 
-  view-users:
-    handler: src/handlers/User/view-users.handler
-    events:
-      - http:
-          path: /view-users
-          method: get
+    view-users:
+        handler: src/handlers/User/view-users.handler
+        events:
+            - http:
+                  path: /view-users
+                  method: get
 
-  update:
-    handler: src/handlers/User/update.handler
-    events:
-      - http:
-          path: /update/{id}
-          method: put
+    update:
+        handler: src/handlers/User/update.handler
+        events:
+            - http:
+                  path: /update/{id}
+                  method: put
 
-  delete:
-    handler: src/handlers/User/delete.handler
-    events:
-      - http:
-          path: /delete/{id}
-          method: delete
+    delete:
+        handler: src/handlers/User/delete.handler
+        events:
+            - http:
+                  path: /delete/{id}
+                  method: delete
 
-  create-project:
-    handler: src/handlers/Project/create-project.handler
-    events:
-      - http:
-          path: /{id}/create-project
-          method: post
+    create-project:
+        handler: src/handlers/Project/create-project.handler
+        events:
+            - http:
+                  path: /{id}/create-project
+                  method: post
 
-  view-project:
-    handler: src/handlers/Project/view-project.handler
-    events:
-      - http:
-          path: /{user_id}/view-project
-          method: get
+    view-project:
+        handler: src/handlers/Project/view-project.handler
+        events:
+            - http:
+                  path: /{user_id}/view-project
+                  method: get
 
-  update-project:
-    handler: src/handlers/Project/update-project.handler
-    events:
-      - http:
-          path: /{user_id}/update-project/{id}
-          method: put
+    update-project:
+        handler: src/handlers/Project/update-project.handler
+        events:
+            - http:
+                  path: /{user_id}/update-project/{id}
+                  method: put
 
-  delete-project:
-    handler: src/handlers/Project/delete-project.handler
-    events:
-      - http:
-          path: /delete-project/{id}
-          method: delete
+    delete-project:
+        handler: src/handlers/Project/delete-project.handler
+        events:
+            - http:
+                  path: /delete-project/{id}
+                  method: delete
